@@ -1,25 +1,36 @@
 package main
 
 import (
+	"atunbetun.jlox.com/pkg/logs"
 	"fmt"
 	"log/slog"
 	"os"
 )
 
-func createLogger() *slog.Logger {
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
-	return logger
-}
-
-func main() {
-	logger := createLogger()
-	logger.Debug(fmt.Sprintf("length: %d", len(os.Args)))
-
+func argumentPrint(logger *slog.Logger) {
 	x := 0
 	for _, val := range os.Args {
 		logger.Debug(fmt.Sprintf("x: %d", x))
 		logger.Debug(val)
 	}
+
+}
+
+func runFile(path string, logger *slog.Logger) {
+	file, err := os.Open(path)
+
+	if err != nil {
+		logger.Error(err.Error())
+		panic(err)
+	}
+	defer file.Close()
+}
+
+func main() {
+	logger := logs.CreateLogger()
+	logger.Debug(fmt.Sprintf("length: %d", len(os.Args)))
+
+	argumentPrint(logger)
 
 	if len(os.Args) > 2 {
 		logger.Info("Usage: jlox [script]")
@@ -30,15 +41,4 @@ func main() {
 	} else {
 		logger.Info("doing nothing")
 	}
-}
-
-func runFile(path string) {
-	logger := createLogger()
-	file, err := os.Open(path)
-
-	if err != nil {
-		logger.Error(err.Error())
-		panic(err)
-	}
-	defer file.Close()
 }
