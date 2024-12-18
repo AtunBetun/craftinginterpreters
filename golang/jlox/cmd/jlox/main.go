@@ -1,10 +1,12 @@
 package main
 
 import (
-	"atunbetun.jlox.com/pkg/logs"
 	"fmt"
+	"io"
 	"log/slog"
 	"os"
+
+	"atunbetun.jlox.com/pkg/logs"
 )
 
 func argumentPrint(logger *slog.Logger) {
@@ -18,6 +20,7 @@ func argumentPrint(logger *slog.Logger) {
 
 // TODO: should be on pkg once abstraction is found
 func runFile(path string, logger *slog.Logger) {
+	logger.Debug(fmt.Sprintf("opening file: %s", path))
 	file, err := os.Open(path)
 
 	if err != nil {
@@ -25,6 +28,8 @@ func runFile(path string, logger *slog.Logger) {
 		panic(err)
 	}
 	defer file.Close()
+	b, err := io.ReadAll(file)
+	logger.Debug(string(b))
 }
 
 func main() {
@@ -39,7 +44,8 @@ func main() {
 	} else if len(os.Args) == 2 {
 		logger.Debug("running jlox")
 		logger.Info(fmt.Sprintf("argument: %s", os.Args[1]))
+		runFile(os.Args[1], logger)
 	} else {
-		logger.Info("doing nothing")
+		logger.Debug("prompt mode")
 	}
 }
