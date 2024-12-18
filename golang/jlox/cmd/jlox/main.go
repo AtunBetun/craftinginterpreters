@@ -16,6 +16,7 @@ func argumentPrint(logger *slog.Logger) {
 
 }
 
+// TODO: should be on pkg once abstraction is found
 func runFile(path string, logger *slog.Logger) {
 	file, err := os.Open(path)
 
