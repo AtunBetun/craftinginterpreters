@@ -1,5 +1,12 @@
 package keywords
 
+type Token struct {
+	TokenType string // should probably be an enum
+	Lexeme    string
+	Literal   string
+	Line      int
+}
+
 const LEFT_PAREN = ""
 const RIGHT_PAREN = ""
 const LEFT_BRACE = ""

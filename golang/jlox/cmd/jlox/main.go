@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"io"
 	"log/slog"
 	"os"
 
 	"atunbetun.jlox.com/pkg/logs"
+	"atunbetun.jlox.com/pkg/scanning"
 )
 
 func argumentPrint(logger *slog.Logger) {
@@ -28,8 +28,10 @@ func runFile(path string, logger *slog.Logger) {
 		panic(err)
 	}
 	defer file.Close()
-	b, err := io.ReadAll(file)
-	logger.Debug(string(b))
+	scanning.FileTokens(file, logger)
+	// b, err := io.ReadAll(file)
+	// logger.Debug(string(b))
+
 }
 
 func main() {
